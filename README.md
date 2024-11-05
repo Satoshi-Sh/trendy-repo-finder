@@ -1,1 +1,1 @@
-# trendy-repo-finder
+# Trendy Repo Finder
