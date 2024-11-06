@@ -29,6 +29,7 @@ def store_data(df, folder_name):
     formatted_timestamp = current_timestamp.strftime("%Y-%m-%d")
 
     df.to_csv(f"{new_folder}/{formatted_timestamp}.csv", index=False)
+    print(f"{new_folder}/{formatted_timestamp}.csv has been created")
 
 
 def extract_page_data(filter):
@@ -101,6 +102,8 @@ def create_folder(path):
     try:
         os.mkdir(path)
         print(f"Directory '{path}' created successfully.")
+    except FileExistsError:
+        None
     except Exception as e:
         print(f"An error occurred: {e}")
 
