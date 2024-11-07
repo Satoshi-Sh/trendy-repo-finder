@@ -57,24 +57,20 @@ def extract_page_data(filter):
             description = repo.p.text.strip() if repo.p else "No description"
 
             # Extract Language
-            language = repo.find("span", {"itemprop": "programmingLanguage"}).text
+            language_tag = repo.find("span", {"itemprop": "programmingLanguage"})
+            language = language_tag.text if language_tag else None
             # Extract the number of stars,forks (if available)
-            star = (
-                repo.find("a", {"href": f"/{title}/stargazers"})
-                .text.strip()
-                .replace(",", "")
-            )
-            star = int(star)
-            forks = (
-                repo.find("a", {"href": f"/{title}/forks"})
-                .text.strip()
-                .replace(",", "")
-            )
-            forks = int(forks)
+            star_tag = repo.find(repo.find("a", {"href": f"/{title}/stargazers"}))
+            star = int(star_tag.text.strip().replace(",", "")) if star_tag else None
+
+            forks_tag = repo.find(repo.find("a", {"href": f"/{title}/forks"}))
+            forks = int(forks_tag.text.strip().replace(",", "")) if forks_tag else None
+            daily_star_tag = repo.find_all("span")[-1]
             daily_star = (
-                repo.find_all("span")[-1].text.strip().split()[0].replace(",", "")
+                int(daily_star_tag.text.strip().split()[0].replace(",", ""))
+                if daily_star_tag
+                else None
             )
-            daily_star = int(daily_star)
 
             data.append(
                 {
