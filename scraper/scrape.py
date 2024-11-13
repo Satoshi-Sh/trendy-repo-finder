@@ -2,10 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
+from dotenv import load_dotenv
 from datetime import datetime
+from notification import send_discord_message
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 # URL of GitHub's Trending page for repositories
 BASE_URL = "https://github.com/trending"
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 languages = [None, "Python", "JavaScript", "TypeScript", "Ruby", "Kotlin", "Rust", "Go"]
 
@@ -18,6 +25,10 @@ def main():
         df, folder_name = extract_page_data(language)
         if df is not None:
             store_data(df, folder_name)
+        else:
+            send_discord_message(
+                WEBHOOK_URL, "Something went wrong. Please check the log..."
+            )
 
 
 def store_data(df, folder_name):
