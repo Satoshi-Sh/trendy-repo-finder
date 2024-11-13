@@ -91,7 +91,7 @@ def extract_page_data(filter):
         print(
             "Failed to retrieve the trending page. Status code:", response.status_code
         )
-        return None
+        return None, None
 
 
 def create_folder(path):
