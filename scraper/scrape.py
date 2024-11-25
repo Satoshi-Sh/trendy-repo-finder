@@ -15,20 +15,30 @@ BASE_URL = "https://github.com/trending"
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 languages = [None, "Python", "JavaScript", "TypeScript", "Ruby", "Kotlin", "Rust", "Go"]
+current_timestamp = datetime.now()
+formatted_timestamp = current_timestamp.strftime("%Y-%m-%d")
 
 
 def main():
     # Create data folder if not
-    create_folder("data")
+    # create_folder("data")
+    full = pd.read_csv("../data/github_daily_trending.csv")
+    dataframes = [full]
     for language in languages:
         language = language.lower() if language else language
         df, folder_name = extract_page_data(language)
         if df is not None:
-            store_data(df, folder_name)
+            df["date"] = formatted_timestamp
+            df["trending_category"] = language if language else "total"
+            dataframes.append(df)
+            # store_data(df, folder_name)
         else:
             send_discord_message(
                 WEBHOOK_URL, "Something went wrong. Please check the log..."
             )
+
+    combined_df = pd.concat(dataframes, ignore_index=True)
+    combined_df.to_csv("../data/github_daily_trending.csv")
 
 
 def store_data(df, folder_name):
