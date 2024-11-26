@@ -14,7 +14,8 @@ def main():
     dataframes = []
     for filename in os.listdir("../data"):
         full_path = os.path.join("../data", filename)
-        if os.path.isfile(full_path):
+        if os.path.isfile(full_path) and "csv" in full_path:
+            print(f"Processing file: {full_path}")
             df = pd.read_csv(full_path)
             dataframes.append(df)
 
