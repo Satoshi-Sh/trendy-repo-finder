@@ -22,7 +22,7 @@ formatted_timestamp = current_timestamp.strftime("%Y-%m-%d")
 def main():
     # Create data folder if not
     # create_folder("data")
-    full = pd.read_csv("../data/github_daily_trending.csv")
+    full = pd.read_csv("data/github_daily_trending.csv")
     dataframes = [full]
     for language in languages:
         language = language.lower() if language else language
@@ -38,7 +38,7 @@ def main():
             )
 
     combined_df = pd.concat(dataframes, ignore_index=True)
-    combined_df.to_csv("../data/github_daily_trending.csv")
+    combined_df.to_csv("data/github_daily_trending.csv")
 
 
 def store_data(df, folder_name):
