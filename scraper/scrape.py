@@ -23,6 +23,7 @@ def main():
     # Create data folder if not
     # create_folder("data")
     full = pd.read_csv("data/github_daily_trending.csv")
+    full = full.loc[:, ~full.columns.str.contains("^Unnamed")]
     dataframes = [full]
     for language in languages:
         language = language.lower() if language else language
@@ -38,7 +39,7 @@ def main():
             )
 
     combined_df = pd.concat(dataframes, ignore_index=True)
-    combined_df.to_csv("data/github_daily_trending.csv")
+    combined_df.to_csv("data/github_daily_trending.csv", index=False)
 
 
 def store_data(df, folder_name):
